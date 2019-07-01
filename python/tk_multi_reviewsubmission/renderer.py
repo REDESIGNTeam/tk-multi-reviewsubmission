@@ -134,6 +134,11 @@ class Renderer(object):
             # Create the output node
             output_node = self.__create_output_node(output_path)
             output_node.setInput(0, scale)
+
+            # disable overlay for Phoenix
+            burn['disable'].setValue(True)
+            # disable slate for Phoenix
+
         finally:
             group.end()
     
@@ -143,7 +148,7 @@ class Renderer(object):
             self.__app.ensure_folder_exists(output_folder)
             
             # Render the outputs, first view only
-            nuke.executeMultiple([output_node], ([first_frame-1, last_frame, 1],), [nuke.views()[0]])
+            nuke.executeMultiple([output_node], ([first_frame, last_frame, 1],), [nuke.views()[0]])
 
         # Cleanup after ourselves
         nuke.delete(group)
