@@ -1,17 +1,22 @@
 # Copyright (c) 2013 Shotgun Software Inc.
-# 
+#
 # CONFIDENTIAL AND PROPRIETARY
-# 
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit 
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
 # Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your 
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights 
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
 # not expressly granted therein are reserved by Shotgun Software Inc.
 
 # Metadata defining the behaviour and requirements for this app
 
 # expected fields in the configuration file for this app
 configuration:
+    display_name:
+        type: str
+        default_value: ""
+        description: Specify the name that should be used in menus and the main
+
     upload_to_shotgun:
         type: bool
         default_value: true
@@ -27,7 +32,9 @@ configuration:
                      this as well as the upload_to_shotgun option will
                      effectively disable the whole tool.
 
+
     movie_path_template:
+        allows_empty: True
         type: template
         required_fields: []
         optional_fields: "*"
@@ -43,18 +50,18 @@ configuration:
 
     movie_width:
         type: int
-        default_value: 1024
+        default_value: 1920
         description: The width of the rendered movie file
 
     movie_height:
         type: int
-        default_value: 540
+        default_value: 1080
         description: The height of the rendered movie file
 
     new_version_status:
-        type: str
-        default_value: rev
-        description: The value to use for a new Version's status.
+         type: str
+         default_value: rev
+         description: The value to use for a new Version's status.
 
     version_number_padding:
         type: int
@@ -67,7 +74,7 @@ configuration:
     slate_logo:
         type: config_path
         description: This is the path to an image to use on the slate such as a
-                     company logo. The supplied image will be reformated into a 
+                     company logo. The supplied image will be reformated into a
                      400 pixel box and the lower left corner of the logo will be
                      aligned 100 pixels to the right and 100 pixels above the
                      lower left corner of the slate. You can use an image with
@@ -76,26 +83,29 @@ configuration:
                      setting is an empty string, no logo will be applied.
         default_value: ""
 
-    codec_settings_hook:
+    render_media_hook:
         type: hook
-        description: Hook for customizing codec settings used when generating items
-                     for review.
-        default_value: '{self}/codec_settings.py'
+        description: Implements how media get generated while this app is running.
+        default_value: '{self}/render_media.py:{self}/{engine_name}/render_media.py'
+
+    submitter_hook:
+        type: hook
+        description: Implements how media get sent to Shotgun
+        default_value: '{self}/submitter_sgtk.py'
 
 # the Shotgun fields that this app needs in order to operate correctly
 requires_shotgun_fields:
 
-# More verbose description of this item 
+# More verbose description of this item
 display_name: "Review Submission"
-description: "Provides functionality to submit image sequences to Shotgun for review."
+description: "Provides functionality to submit media to Shotgun for review."
 
 # Required minimum versions for this item to run
 requires_shotgun_version:
-requires_core_version: "v0.14.0"
-requires_engine_version: 
+requires_core_version: "v0.19.5"
+requires_engine_version:
 
-# For now this app is only compatible with Nuke.
-supported_engines: ["tk-nuke"]
+supported_engines:
 
 # the frameworks required to run this app
 frameworks:
